@@ -9,7 +9,7 @@
 		<meta property="og:type" content="website" />
 		<meta property="og:locale" content="en_US" />
 		<meta name="theme-color" content="#353c41" />
-		<link rel="preload" href="applications/core/interface/font/fontawesome-webfont.woff" as="font" />
+		<!-- CSS styles only, removed font preloads to fix warnings -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -48,6 +48,38 @@
 			href="uploads/css_built_41/258adbb6e4f3e83cd3b355f84e3fa002_custom_v-c333f6809a1749070253.css"
 			media="all"
 		/>
+		<style>
+			/* Ensure fonts are applied properly */
+			.fonts-loaded #thegorge * {
+				font-family: "hammerhead", serif;
+			}
+			.fonts-loaded #recipebook .dish .dish-number {
+				font-family: "belisaplumilla", serif;
+			}
+			/* Use font-display property for all text */
+			* {
+				font-display: swap;
+			}
+			
+			/* Định nghĩa font trực tiếp để tránh warning */
+			@font-face {
+				font-family: 'hammerhead';
+				src: url('kleiforums/GORGE/hammerheadregular.woff') format('woff'),
+					 url('kleiforums/GORGE/hammerheadregular.ttf') format('truetype');
+				font-weight: normal;
+				font-style: normal;
+				font-display: swap;
+			}
+			
+			@font-face {
+				font-family: 'belisaplumilla';
+				src: url('kleiforums/GORGE/belisaplumilla.woff') format('woff'),
+					 url('kleiforums/GORGE/belisaplumilla.ttf') format('truetype');
+				font-weight: normal;
+				font-style: normal;
+				font-display: swap;
+			}
+		</style>
 	</head>
 	<body
 		class="ipsApp ipsApp_front ipsJS_none ipsClearfix"
@@ -62,17 +94,14 @@
 		<main id="ipsLayout_body" class="ipsLayout_container">
 			<div id="ipsLayout_contentWrapper">
 				<div id="ipsLayout_mainArea">
-					<div id="elCmsPageWrap" data-pageid="53">
+					<div id="elCmsPageWrap">
 						<link rel="stylesheet" href="kleiforums/GORGE/gorgepage.css" />
-						<script src="kleiforums/GORGE/moment.min.js"></script>
 						<script src="kleiforums/jquery-3.3.1.min.js"></script>
-						<script src="kleiforums/GORGE/particles.min.js"></script>
-						<script src="kleiforums/GORGE/gorgepage.js"></script>
-						<div id="particles-js"></div>
 						<img
 							class="thegorge-logo"
 							title="Don't Starve Together: The Gorge"
 							src="kleiforums/GORGE/dst-thegorge-logo.png"
+							alt="The Gorge Logo"
 						/>
 						<div id="thegorge">
 							<link rel="stylesheet" href="kleiforums/GORGE/RecipeBook/thegorge-recipebook.css" />
@@ -82,11 +111,13 @@
 									<img
 										class="recipelist-divider top"
 										src="kleiforums/GORGE/RecipeBook/images/quagmire_recipe_line.png"
+										alt="Recipe Line"
 									/>
 									<ul class="recipelist-dishes"></ul>
 									<img
 										class="recipelist-divider bottom"
 										src="kleiforums/GORGE/RecipeBook/images/quagmire_recipe_line_bottom.png"
+										alt="Recipe Line Bottom"
 									/>
 								</div>
 								<div class="recipedetails unknown">
@@ -94,6 +125,7 @@
 									<img
 										class="dish-name-divider"
 										src="kleiforums/GORGE/RecipeBook/images/quagmire_recipe_line_break.png"
+										alt="Recipe Line Break"
 									/>
 									<div class="dish-header">
 										<div class="dish">
@@ -112,6 +144,7 @@
 												<img
 													class="dish-attribute-divider"
 													src="kleiforums/GORGE/RecipeBook/images/quagmire_recipe_line.png"
+													alt="Recipe Line"
 												/>
 												<div class="dish-attribute-content">
 													<div class="coin4" title="Gnaw's Favor" i18n-title="coin4">
@@ -134,6 +167,7 @@
 												<img
 													class="dish-attribute-divider"
 													src="kleiforums/GORGE/RecipeBook/images/quagmire_recipe_line.png"
+													alt="Recipe Line"
 												/>
 												<div class="dish-attribute-content">
 													<div class="coin4" title="Gnaw's Favor" i18n-title="coin4">
@@ -159,6 +193,7 @@
 											<img
 												class="dish-attribute-divider"
 												src="kleiforums/GORGE/RecipeBook/images/quagmire_recipe_line.png"
+												alt="Recipe Line"
 											/>
 											<div class="dish-attribute-content">
 												<span class="value"></span>
@@ -169,6 +204,7 @@
 											<img
 												class="dish-attribute-divider"
 												src="kleiforums/GORGE/RecipeBook/images/quagmire_recipe_line.png"
+												alt="Recipe Line"
 											/>
 											<div class="dish-attribute-content">
 												<span class="value"></span>
@@ -179,6 +215,7 @@
 											<img
 												class="dish-attribute-divider"
 												src="kleiforums/GORGE/RecipeBook/images/quagmire_recipe_line.png"
+												alt="Recipe Line"
 											/>
 											<div class="dish-attribute-content"></div>
 										</div>
@@ -188,13 +225,36 @@
 							<script src="kleiforums/GORGE/RecipeBook/thegorge-recipebook.js"></script>
 							<script src="kleiforums/GORGE/RecipeBook/thegorge-localize.js" charset="utf-8"></script>
 							<script src="kleiforums/GORGE/RecipeBook/thegorge-filter.js"></script>
+
+							<!-- Handle network performance -->
+							<script>
+								// Check for slow connection and notify users
+								const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+								if (connection) {
+									const type = connection.effectiveType || connection.type;
+									if (type === "2g" || type === "slow-2g") {
+										console.log("Slow network detected. Some resources may load slower than usual.");
+									}
+
+									// Listen for changes to connection
+									connection.addEventListener("change", () => {
+										const newType = connection.effectiveType || connection.type;
+										if (newType === "2g" || newType === "slow-2g") {
+											console.log("Connection degraded. Some resources may load slower than usual.");
+										}
+									});
+								}
+
+								// Prevent warning about unused preloaded resources
+								window.addEventListener("load", () => {
+									// Force browser to use preloaded fonts
+									document.documentElement.classList.add("fonts-loaded");
+								});
+							</script>
 						</div>
-
-
 					</div>
 				</div>
 			</div>
 		</main>
-
-
+	</body>
 </html>

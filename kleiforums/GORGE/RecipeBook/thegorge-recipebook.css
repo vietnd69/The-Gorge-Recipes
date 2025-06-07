@@ -67,8 +67,23 @@ img {
   font-weight: 700;
   display: flex;
   width: 100%;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 16px;
+
+  .filter-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: space-between;
+  }
+.btn_sort_div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
 }
+}
+
 #filter-button .category-station-container {
   display: flex;
   flex-direction: column;
@@ -89,7 +104,7 @@ img {
   margin: 0;
   padding: 0;
   list-style: none;
-  overflow-y: scroll;
+  padding: 10px 0
 }
 #recipebook .recipelist .recipelist-dishes::-webkit-scrollbar {
   width: 30px;
@@ -161,6 +176,7 @@ img {
   height: 96px;
   margin: 5px;
   cursor: pointer;
+  position: relative;
 }
 #recipebook .recipelist .dish:before {
   content: " ";
@@ -172,16 +188,34 @@ img {
   box-shadow: 0px 0px 5px 0px #00000000;
   z-index: -1;
 }
-#recipebook .recipelist .dish:hover,
-#recipebook .recipelist .dish:active,
-#recipebook .recipelist .dish:focus {
+#recipebook .recipelist .dish:hover:not(.lowpoint),
+#recipebook .recipelist .dish:active:not(.lowpoint),
+#recipebook .recipelist .dish:focus:not(.lowpoint) {
   transform: scale(1.05);
+  background-image: url(images/recipe_known_selected.png);
 }
-#recipebook .recipelist .dish:hover:before,
-#recipebook .recipelist .dish:active:before,
-#recipebook .recipelist .dish:focus:before {
+#recipebook .recipelist .dish:hover:not(.lowpoint):before,
+#recipebook .recipelist .dish:active:not(.lowpoint):before,
+#recipebook .recipelist .dish:focus:not(.lowpoint):before {
   box-shadow: 0px 0px 40px 0px #00000060;
   z-index: -1;
+}
+
+/* Ngăn không cho các phần tử lowpoint phản hồi với hover */
+#recipebook .recipelist .dish.lowpoint {
+  pointer-events: auto;
+  cursor: default;
+}
+#recipebook .recipelist .dish.lowpoint:hover,
+#recipebook .recipelist .dish.lowpoint:active,
+#recipebook .recipelist .dish.lowpoint:focus {
+  transform: none;
+  background-image: url(images/recipe_known.png);
+}
+#recipebook .recipelist .dish.lowpoint:hover:before,
+#recipebook .recipelist .dish.lowpoint:active:before,
+#recipebook .recipelist .dish.lowpoint:focus:before {
+  box-shadow: none;
 }
 #recipebook .recipedetails {
   font-size: 1rem;
@@ -374,6 +408,12 @@ img {
 }
 #recipebook .dish.selected {
   background-image: url(images/recipe_known_selected.png);
+  transform: scale(1.05);
+  z-index: 10;
+}
+#recipebook .dish.selected:before {
+  box-shadow: 0px 0px 40px 0px #00000060;
+  z-index: -1;
 }
 #recipebook .dish.discovered .dish-number {
   color: #ffd559;
@@ -441,7 +481,7 @@ img {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  filter: drop-shadow(0 1px 0 #ffffff) drop-shadow(0 -1px 0 #ffffff) drop-shadow(1px 0 0 #ffffff) drop-shadow(-1px 0 0 #ffffff);
+  filter: drop-shadow(0 1px 0 #d18844 ) drop-shadow(0 -1px 0 #d18844 ) drop-shadow(1px 0 0 #d18844 ) drop-shadow(-1px 0 0 #d18844 );  
 
 }
 #recipebook .dish .tribute-icon.coin1 {
@@ -465,7 +505,7 @@ img {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  filter: drop-shadow(0 1px 0 #ffffff) drop-shadow(0 -1px 0 #ffffff) drop-shadow(1px 0 0 #ffffff) drop-shadow(-1px 0 0 #ffffff);
+  filter: drop-shadow(0 1px 0 #edf1f3) drop-shadow(0 -1px 0 #edf1f3) drop-shadow(1px 0 0 #edf1f3) drop-shadow(-1px 0 0 #edf1f3);
 }
 #recipebook .dish .plating-tribute-icon.coin1 {
   background-image: url(images/quagmire_coin1.png);
@@ -583,29 +623,12 @@ img {
   }
   #recipebook {
     flex-direction: column;
-    padding: 20px 34px;
+    padding: 0 16px;
   }
-  #recipebook:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    border-style: solid;
-    border-width: 110px 70px 60px;
-    -moz-border-image: url(images/quagmire_recipe_menu_bg_narrow.png) 110 70 60 stretch;
-    -webkit-border-image: url(images/quagmire_recipe_menu_bg_narrow.png) 110 70 60 stretch;
-    -o-border-image: url(images/quagmire_recipe_menu_bg_narrow.png) 110 70 60 stretch;
-    border-image: url(images/quagmire_recipe_menu_bg_narrow.png) 110 70 60 fill stretch;
-    z-index: 0;
-  }
+  
   #recipebook .recipelist .recipelist-dishes {
-    max-height: 21s0px;
-    overflow-y: auto;
     list-style-type: none;
-    white-space: nowrap;
-    overflow-x: scroll;
+
   }
   #recipebook .recipelist .recipelist-dishes br {
     display: inherit;
@@ -667,8 +690,8 @@ img {
   line-height: normal;
   cursor: pointer;
   background-color: #C29970;
-  border-radius: 10px;
-  padding: 10px;
+  border-radius: 6px;
+  padding: 6px 10px;
   border: none;
   margin: 3px;
   user-select: none;
@@ -677,6 +700,98 @@ img {
   border-color: #000;
   background-color: #911;
   color: #fff;
+}
+
+/* Sort select dropdown styling */
+.sort_select_wrapper {
+  position: relative;
+  display: inline-block;
+  margin: 3px;
+}
+
+.sort_select_wrapper::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="m98 190.06 139.78 163.12a24 24 0 0 0 36.44 0L414 190.06c13.34-15.57 2.28-39.62-18.22-39.62h-279.6c-20.5 0-31.56 24.05-18.18 39.62z" fill="%23573c1d"/></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sort_select_wrapper::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><g fill="%23573c1d"><path d="M3 3a1 1 0 0 0 0 2h11a1 1 0 1 0 0-2zM3 7a1 1 0 0 0 0 2h7a1 1 0 1 0 0-2zM3 11a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2zM15 8a1 1 0 1 0-2 0v5.586l-1.293-1.293a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.414 0l3-3a1 1 0 0 0-1.414-1.414L15 13.586z"/></g></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sort_select {
+  font-family: 'hammerhead', serif;
+  background-color: #C29970 !important;
+  color: #573c1d;
+  border: none !important;
+  border-radius: 10px;
+  padding: 10px 15px;
+  padding-left: 40px !important; 
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-left: 40px;
+  padding-right: 40px;
+  min-width: 200px;
+  width: 100%;
+}
+
+.sort_select:hover {
+  background-color: #af8860;
+  border-color: #000;
+}
+
+.sort_select:focus {
+  outline: 2px solid #3b2915af !important;
+  box-shadow: none !important;
+  background-color: #C29970;
+  color: #573c1d;
+}
+
+.sort_select_wrapper:hover::after,
+.sort_select_wrapper:hover::before {
+  color: #573c1d;
+}
+
+/* Xóa bỏ thay đổi màu icon khi focus */
+.sort_select_wrapper.focus::after {
+  /* Giữ nguyên màu icon khi focus */
+}
+
+.sort_select_wrapper.focus::before {
+  /* Giữ nguyên màu icon khi focus */
+}
+
+.sort_select option {
+  background-color: #C29970;
+  color: #573c1d;
+  font-family: 'hammerhead', serif;
+  padding: 8px;
 }
 input:checked + .button {
   border-color: #000 !important;
@@ -699,4 +814,264 @@ input:not(:checked) + .button {
 #recipebook .recipelist .dish:active.lowpoint,
 #recipebook .recipelist .dish:focus.lowpoint {
   transform: initial;
+}
+
+/* Mobile Responsive for Filter Controls */
+@media screen and (max-width: 768px) {
+  #filter-button {
+    font-size: 1rem;
+    gap: 12px;
+  }
+  
+  #filter-button .filter-container {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  #filter-button .category-station-container {
+    width: 100%;
+    align-items: center;
+  }
+  
+  #filter-button .offering-container {
+    width: 100%;
+    align-items: center;
+  }
+  
+  #filter-button .btn_sort_div {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .button {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    margin: 2px;
+  }
+  
+  .sort_select {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    padding-left: 35px;
+    padding-right: 35px;
+    min-width: 180px;
+  }
+  
+  .sort_select_wrapper::after {
+    width: 14px;
+    height: 14px;
+    right: 10px;
+  }
+  
+  .sort_select_wrapper::before {
+    width: 16px;
+    height: 16px;
+    left: 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #filter-button {
+    font-size: 0.9rem;
+    gap: 10px;
+  }
+  
+  #filter-button .btn_sort_div {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #filter-button .btn_sort_div span {
+    margin-bottom: 8px;
+    font-size: 1rem;
+  }
+  
+  .button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    margin: 1px;
+    border-radius: 8px;
+  }
+  
+  .sort_select {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    min-width: 160px;
+    border-radius: 8px;
+  }
+  
+  .sort_select_wrapper::after {
+    width: 12px;
+    height: 12px;
+    right: 8px;
+  }
+  
+  .sort_select_wrapper::before {
+    width: 14px;
+    height: 14px;
+    left: 8px;
+  }
+  
+  /* Smaller coin icons on mobile */
+  .button img {
+    width: 16px !important;
+    height: 16px !important;
+    margin-right: 3px !important;
+  }
+}
+
+/* Tablet Responsive */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  #filter-button .filter-container {
+    gap: 16px;
+  }
+  
+  #filter-button .category-station-container,
+  #filter-button .offering-container {
+    justify-content: center;
+  }
+  
+  #filter-button .btn_cat_div,
+  #filter-button .btn_station_div,
+  #filter-button .btn_offering_div,
+  #filter-button .btn_silver_offering_div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+/* Improve readability on all screen sizes */
+@media screen and (max-width: 768px) {
+  #recipebook .recipelist .dish {
+    width: 80px;
+    height: 80px;
+    margin: 3px;
+  }
+  
+  #recipebook .recipelist .recipelist-dishes {
+    padding: 8px 0;
+  }
+}
+
+/* Very small mobile screens */
+@media screen and (max-width: 360px) {
+  #filter-button {
+    padding: 0 8px;
+  }
+  
+  .button {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    margin: 1px;
+  }
+  
+  .sort_select {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    padding-left: 25px;
+    padding-right: 25px;
+    min-width: 140px;
+  }
+  
+  .sort_select_wrapper::after {
+    width: 10px;
+    height: 10px;
+    right: 6px;
+  }
+  
+  .sort_select_wrapper::before {
+    width: 12px;
+    height: 12px;
+    left: 6px;
+  }
+  
+  #filter-button .btn_sort_div span {
+    font-size: 0.9rem;
+  }
+  
+  #recipebook .recipelist .dish {
+    width: 70px;
+    height: 70px;
+    margin: 2px;
+  }
+}
+
+#recipebook .dish.hover-selected {
+  background-image: url(images/recipe_known_selected.png);
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+#recipebook .dish.hover-selected:before {
+  box-shadow: 0px 0px 40px 0px #00000060;
+  z-index: -1;
+}
+
+/* Tối ưu CSS cho scroll */
+.is-scrolling .dish {
+  will-change: transform;
+  pointer-events: none !important;
+  transition: none !important;
+}
+
+.is-scrolling .dish:hover:not(.lowpoint),
+.is-scrolling .dish:active:not(.lowpoint),
+.is-scrolling .dish:focus:not(.lowpoint),
+.is-scrolling .dish.hover-selected {
+  transform: none !important;
+  box-shadow: none !important;
+  background-image: url(images/recipe_known.png) !important;
+}
+
+.is-scrolling .dish.selected {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Tối ưu scroll container */
+#recipebook .recipelist .recipelist-dishes {
+  will-change: transform;
+  -webkit-overflow-scrolling: touch;
+  backface-visibility: hidden;
+}
+
+/* Tối ưu cho dish container */
+#recipebook .recipelist {
+  contain: content;
+}
+
+/* Tối ưu các item trong danh sách */
+#recipebook .recipelist .dish {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  contain: layout style paint;
+}
+
+/* Tối ưu recipedetails để tránh reflow */
+#recipebook .recipedetails {
+  contain: layout style;
+}
+
+/* Virtual scrolling */
+.outside-viewport {
+  visibility: hidden;
+  pointer-events: none;
+  contain: strict;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+}
+
+/* Class khi đang cập nhật DOM */
+.updating-dom * {
+  transition: none !important;
+  animation: none !important;
 }
